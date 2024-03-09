@@ -1,0 +1,49 @@
+DROP DATABASE IF EXISTS blog;
+CREATE DATABASE blog;
+USE blog;
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	username VARCHAR(32) UNIQUE NOT NULL,
+	name VARCHAR(255),
+	surname VARCHAR(255),
+	password_hash VARCHAR(255) NOT NULL,
+	salt VARCHAR(255) NOT NULL,
+	created_at TIMESTAMP NOT NULL,
+	updated_at TIMESTAMP NOT NULL
+);
+
+DROP TABLE IF EXISTS articles;
+CREATE TABLE articles (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	title VARCHAR(255) UNIQUE NOT NULL,
+	description VARCHAR(255) NOT NULL,
+	text MEDIUMTEXT NOT NULL,
+	author INT NOT NULL,
+	created_at TIMESTAMP NOT NULL,
+	updated_at TIMESTAMP NOT NULL,
+	FOREIGN KEY (author) REFERENCES users(id)
+);
+
+DROP TABLE IF EXISTS likes;
+CREATE TABLE likes (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	article_id INT NOT NULL,
+	user_id INT NOT NULL,
+	created_at TIMESTAMP NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (article_id) REFERENCES articles(id)
+);
+
+DROP TABLE IF EXISTS comments;
+CREATE TABLE comments (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	text TINYTEXT NOT NULL,
+	article_id INT NOT NULL,
+	user_id INT NOT NULL,
+	created_at TIMESTAMP NOT NULL,
+	updated_at TIMESTAMP NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (article_id) REFERENCES articles(id)
+);
